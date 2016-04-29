@@ -1,13 +1,4 @@
-# Independent-Event-Identifier-IEI-
-
----
-title: "Fast independent event identifier or how to use recursive functions"
-author: "David Zimmermann"
-date: "28. April 2016"
-output: html_document
----
-
-
+# Fast independent event identifier or how to use recursive functions
 
 The following introduces a small code snippet that calculates the count-bids as Grigory defined it.
 

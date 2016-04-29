@@ -173,7 +173,7 @@ Taking the data provided by Grigory from his [Github page](https://github.com/gr
 ## 1000: 1000 Zebulin's IceCream Inc 2008-03-03
 ```
 
-As the function ``iei` only takes values per category, we can use the by-argument of the `data.table`-package to calculate the count variable:
+As the function `iei` only takes values per category, we can use the by-argument of the `data.table`-package to calculate the count variable:
 
 
 ```r
@@ -242,7 +242,7 @@ We can call the optimized version as usual
 
 ```r
 dt[, count_int := iei(date_int), by = "comp"]
-dt[, count_cmp := comp_iei(date), by = "comp"
+dt[, count_cmp := comp_iei(date), by = "comp"]
 ```
 
 ## Speed comparison

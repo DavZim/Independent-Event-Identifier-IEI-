@@ -41,7 +41,9 @@ iei <- function(x) {
 comp_iei <- cmpfun(iei)
 
 # load data -------
-dt <- data.table(read.csv("https://raw.githubusercontent.com/gregcodes/counter_challenge/master/dataset.csv", sep = ";"))
+link_small <- "https://raw.githubusercontent.com/gregcodes/counter_challenge/master/Datasets/dataset_small.csv"
+
+dt <- data.table(read.csv(link_small, sep = ";"))
 setnames(dt, c("id", "comp", "date"))
 dt[, date := as.Date(date)]
 dt <- dt[order(comp, date)]

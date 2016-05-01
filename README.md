@@ -15,7 +15,7 @@ Grigory's definition includes the following. Given we have a data.frame of compa
 ```
 The issue now is to create an algorithm that is able to identify these dates in the fastest way. 
 
-My humble approach is the following `iei` function that is used recursively (calling itself in the function). The function looks like this:
+My humble approach is the following `iei` function that is used recursively (calling itself within the function). The function looks like this:
 
 
 ```r
@@ -37,7 +37,7 @@ iei <- function(x) {
 }
 ```
 
-I know it looks complicated, therefore I will direclty dive into it and explain line by line.
+I know it looks complicated, therefore I will directly dive into it and explain it line by line.
 
 ## Detailed Description
 

@@ -1,4 +1,11 @@
-# Fast independent event identifier or how to use recursive functions
+---
+title: "Fast independent event identifier or how to use recursive functions"
+author: "David Zimmermann"
+date: "28. April 2016"
+output: html_document
+---
+
+
 
 The following introduces a small code snippet that calculates the count-bids as Grigory defined it.
 
@@ -15,7 +22,7 @@ Grigory's definition includes the following. Given we have a data.frame of compa
 ```
 The issue now is to create an algorithm that is able to identify these dates in the fastest way. 
 
-My humble approach is the following `iei` function that is used recursively (calling itself within the function). The function looks like this:
+My humble approach is the following `iei` function that is used recursively (calling itself in the function). The function looks like this:
 
 
 ```r
@@ -37,7 +44,7 @@ iei <- function(x) {
 }
 ```
 
-I know it looks complicated, therefore I will directly dive into it and explain it line by line.
+I know it looks complicated, therefore I will direclty dive into it and explain line by line.
 
 ## Detailed Description
 
@@ -173,7 +180,7 @@ Taking the data provided by Grigory from his [Github page](https://github.com/gr
 ## 1000: 1000 Zebulin's IceCream Inc 2008-03-03
 ```
 
-As the function `iei` only takes values per category, we can use the by-argument of the `data.table`-package to calculate the count variable:
+As the function ``iei` only takes values per category, we can use the by-argument of the `data.table`-package to calculate the count variable:
 
 
 ```r
@@ -242,7 +249,7 @@ We can call the optimized version as usual
 
 ```r
 dt[, count_int := iei(date_int), by = "comp"]
-dt[, count_cmp := comp_iei(date), by = "comp"]
+dt[, count_cmp := comp_iei(date), by = "comp"
 ```
 
 ## Speed comparison

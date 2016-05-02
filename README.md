@@ -5,8 +5,6 @@ date: "28. April 2016"
 output: html_document
 ---
 
-
-
 The following introduces a small code snippet that calculates the count-bids as Grigory defined it.
 
 Grigory's definition includes the following. Given we have a data.frame of companies and dates, we want to find dates that are 60 days apart, however, the catch is, that once a date is identified, this date blocks the next 60 dates, another entry at the 61$^{st}$ day will be counted again, regardless of other dates in between. Also, the first day is always chosen. The given example shows Abigail's Jewelry Inc and the five respective events. Of these five events the first is independent as it is the first event for the company (group) and is counted as 1. With a gap of 16 days, the second date is below the threshhold and is thus marked as dependent (counted as 0). The third event is still less than 60 days from the first counted with a difference of 31 days, as is the fourth event with 32 days. The last event has a distance of 74, therefore it is regarded as independent.
@@ -137,15 +135,15 @@ if (length(x_new) != 0) {
   count_new <- numeric(0)
 }
 ```
-The `if`-clause iterates over the remaining date-values if there is another `x_new` in a recursive call (recursive because in the `if`-clause the function itself is called again on the remaining values. That means that the programm starts a new environment and sets `x`  to `x_new` and iterates lines 1 thru 12). The `else`-clause is triggered in the last round and aborts the recursive loop. Note that `numeric(0)` is basically an empty element, thus concenating the empty element with another vector only returns the other vector.
+The `if`-clause iterates over the remaining date-values if there is another `x_new` in a recursive call (recursive because in the `if`-clause the function itself is called again on the remaining values. That means that the programm starts a new environment and sets `x`  to `x_new` and iterates lines 1 thru 12). The `else`-clause is triggered in the last round and aborts the recursive loop. Note that `numeric(0)` is basically an empty element, thus concatenating the empty element with another vector only returns the other vector.
 
-### Line 12: Concenate the old and new values
+### Line 12: Concatenate the old and new values
 
 ```r
   c(count_stay, count_new)
 }
 ```
-As a last step we concenate the old stay values with the new count values (as returned by the function itself). Note that the function kind of collapses from the top environment (the innermost call to the function itself returning a vector of 1s and 0s for the last dates not independent of the former dates) to the bottom environment, concenating the returing values along with it.
+As a last step we concatenate the old stay values with the new count values (as returned by the function itself). Note that the function kind of collapses from the top environment (the innermost call to the function itself returning a vector of 1s and 0s for the last dates not independent of the former dates) to the bottom environment, concatenating the returning values along with it.
 
 ## Testing the Algorithm
 Coming back to our example of x = 2000-01-02, 2000-03-01, 2000-05-19 we expect a series of [1, 0, 1] as the difference between the first two dates is less than 60 days (returning a 1 for the first event, and a 0 for the second) and the third date is independent (i.e., more than 60 days apart). When we run the code we get
@@ -258,10 +256,17 @@ To compare the speeds of the different versions, we use the `microbenchmark`-pac
 
 ```r
 library(microbenchmark)
+```
+
+```
+## Warning: package 'microbenchmark' was built under R version 3.2.5
+```
+
+```r
 res_bench <- microbenchmark(
   iei = dt[, count := iei(date), by = "comp"],
-  iei_int = dt[, count_comp := comp_iei(date), by = "comp"],
-  comp_iei = dt[, count_int := iei(date_int), by = "comp"],
+  comp_iei = dt[, count_comp := comp_iei(date), by = "comp"],
+  iei_int = dt[, count_int := iei(date_int), by = "comp"],
   comp_iei_int = dt[, count_int_comp := comp_iei(date_int), by = "comp"],
   times = 100
 )
@@ -272,10 +277,10 @@ res_bench # prints the results as a table
 ```
 ## Unit: milliseconds
 ##          expr       min        lq      mean    median        uq       max
-##           iei 197.29162 207.03715 215.35822 212.75301 221.16470 264.49173
-##       iei_int 194.79227 205.65179 214.37802 212.27330 218.55623 416.39956
-##      comp_iei  15.50939  15.88958  16.83628  16.12319  16.51649  29.62734
-##  comp_iei_int  14.63254  14.96344  15.76969  15.17977  15.61436  27.98181
+##           iei 247.89492 259.92058 265.35705 265.85341 269.96086 294.33861
+##      comp_iei 243.26296 256.63559 262.92136 261.62981 266.40801 412.03898
+##       iei_int  15.78461  17.17733  18.80551  18.56077  19.91061  26.93471
+##  comp_iei_int  14.63382  15.67036  17.32711  16.42497  17.83817  32.39167
 ##  neval cld
 ##    100   b
 ##    100   b
@@ -290,9 +295,9 @@ autoplot(res_bench) # plots the results using ggplot2
 ![plot of chunk unnamed-chunk-20](figure/unnamed-chunk-20-1.png) 
 
 
-We see that the compiled function using the integer dates takes roughly only 7% of the time the initial function took, reducing the average of the first function from 200 milliseconds down to 15 milliseconds.
+We see that the compiled function using the integer dates takes roughly only 6% of the time the initial function took, reducing the average of the first function from 280 milliseconds down to 18 milliseconds (note, the results may vary slightly).
 
-Note that the speed is depending on the machine (I ran this code on a rather slow netbook with an Intel Celeron N3150 @ 1.60 GHz CPU, 4 GB of RAM on a 64 bit Windows 10 version). Rerunning the code on a Laptop with an Intel Core i7-3520M @ 2.90GHz with 8 GB of RAM on a 64 bit Windows 7 Professional I got results which where roughly 3 times faster at 54 milliseconds for the `iei(date)`-function and 3.8 milliseconds for the `comp_iei(date_int)`.
+Note that the speed is depending on the machine (I ran this code on a rather slow netbook with an Intel Celeron N3150 @ 1.60 GHz CPU, 4 GB of RAM on a 64 bit Windows 10 version). Rerunning the code on a Laptop with an Intel Core i7-3520M @ 2.90GHz with 8 GB of RAM on a 64 bit Windows 7 Professional I got results which where roughly 5 times faster at 54 milliseconds for the `iei(date)`-function and 3.8 milliseconds for the `comp_iei(date_int)`.
 
 
 

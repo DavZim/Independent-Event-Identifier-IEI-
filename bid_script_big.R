@@ -34,8 +34,8 @@ dt[, date_int := as.integer(date)]
 
 res_bench <- microbenchmark(
   iei = dt[, count := iei(date), by = "comp"],
-  iei_int = dt[, count_comp := comp_iei(date), by = "comp"],
-  comp_iei = dt[, count_int := iei(date_int), by = "comp"],
+  comp_iei = dt[, count_comp := comp_iei(date), by = "comp"],
+  iei_int = dt[, count_int := iei(date_int), by = "comp"],
   comp_iei_int = dt[, count_int_comp := comp_iei(date_int), by = "comp"],
   times = 10
 )
